@@ -1,0 +1,20 @@
+{
+  "id": "sunset-20260331-r81v",
+  "title": "Sunset",
+  "description": "",
+  "createdAt": "2026-03-31T21:18:01.988Z",
+  "updatedAt": "2026-03-31T21:18:16.636Z",
+  "videos": [
+    {
+      "order": 1,
+      "title": "1",
+      "url": "https://res.cloudinary.com/dgtnqpi8c/video/upload/v1774991894/Postal/cwp8mdu1ocwieyu9de3t.mp4",
+      "publicId": "Postal/cwp8mdu1ocwieyu9de3t",
+      "duration": 10.093417,
+      "bytes": 18390453,
+      "format": "mp4",
+      "width": 2880,
+      "height": 2160
+    }
+  ]
+}
