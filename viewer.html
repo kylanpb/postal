@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Postal - Viewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles/viewer.css">
+</head>
+<body>
+  <div id="loading-screen" class="screen screen-active">
+    <div class="loading-mark">Postal</div>
+    <p>Loading post…</p>
+  </div>
+
+  <div id="error-screen" class="screen">
+    <div class="error-card">
+      <div class="loading-mark">Postal</div>
+      <h1>Post unavailable</h1>
+      <p id="error-message">The requested post could not be loaded.</p>
+    </div>
+  </div>
+
+  <div id="app" class="app hidden">
+    <header class="viewer-header">
+      <div>
+        <p class="viewer-kicker">Postal</p>
+        <h1 id="post-title">Carousel</h1>
+      </div>
+      <div class="header-meta">
+        <span id="clip-counter">1 / 1</span>
+      </div>
+    </header>
+
+    <main class="viewer-main">
+      <div id="stage" class="stage">
+        <div id="video-strip" class="video-strip"></div>
+
+        <button id="prev-btn" class="nav-button hidden" type="button" aria-label="Previous clip">Prev</button>
+        <button id="next-btn" class="nav-button hidden" type="button" aria-label="Next clip">Next</button>
+        <button id="tap-toggle" class="tap-toggle" type="button" aria-label="Play or pause active clip"></button>
+        <div id="play-indicator" class="play-indicator">Paused</div>
+      </div>
+
+      <footer class="viewer-footer">
+        <div id="dots" class="dots"></div>
+      </footer>
+    </main>
+  </div>
+
+  <script src="./scripts/shared.js"></script>
+  <script src="./scripts/viewer.js"></script>
+</body>
+</html>

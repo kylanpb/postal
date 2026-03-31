@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Postal - Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles/admin.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Postal</p>
+        <h1>Carousel admin for Cloudinary-hosted posts.</h1>
+        <p class="hero-copy">
+          Build a post, upload clips straight to Cloudinary, then publish a static JSON file for GitHub Pages.
+        </p>
+      </div>
+      <div class="hero-card">
+        <div class="hero-stat">
+          <span class="hero-stat-label">Publish target</span>
+          <strong>GitHub Pages + /posts/*.json</strong>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-label">Video delivery</span>
+          <strong>Cloudinary public video URLs</strong>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar">
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="panel-kicker">Setup</p>
+              <h2>Cloudinary</h2>
+            </div>
+          </div>
+          <div class="field-grid">
+            <label class="field">
+              <span>Cloud name</span>
+              <input id="cloud-name" type="text" placeholder="your-cloud-name" autocomplete="off">
+            </label>
+            <label class="field">
+              <span>Unsigned upload preset</span>
+              <input id="upload-preset" type="text" placeholder="postal_unsigned_videos" autocomplete="off">
+            </label>
+            <label class="field">
+              <span>Optional folder</span>
+              <input id="cloud-folder" type="text" placeholder="postal" autocomplete="off">
+            </label>
+            <label class="field">
+              <span>GitHub Pages base URL</span>
+              <input id="site-url" type="url" placeholder="https://your-user.github.io/postal" autocomplete="off">
+            </label>
+          </div>
+          <p class="hint">
+            These values stay in this browser for convenience. Published viewer links only depend on the JSON file in <code>posts/</code>.
+          </p>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="panel-kicker">Drafts</p>
+              <h2>Posts</h2>
+            </div>
+          </div>
+          <div class="new-post">
+            <input id="new-post-title" type="text" maxlength="80" placeholder="Spring launch carousel">
+            <button id="create-post-btn" class="button button-primary" type="button">Create post</button>
+          </div>
+          <div id="post-list" class="post-list"></div>
+        </section>
+      </aside>
+
+      <section class="editor">
+        <div id="empty-state" class="panel empty-state">
+          <p class="panel-kicker">No draft selected</p>
+          <h2>Create or select a post to start.</h2>
+          <p>Each post stores metadata locally while you are editing, but published posts are plain JSON files that any device can load.</p>
+        </div>
+
+        <div id="editor-shell" class="editor-shell hidden">
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="panel-kicker">Post details</p>
+                <h2 id="editor-title">Untitled</h2>
+              </div>
+              <button id="delete-post-btn" class="button button-ghost button-danger" type="button">Delete draft</button>
+            </div>
+
+            <div class="field-grid">
+              <label class="field">
+                <span>Title</span>
+                <input id="post-title" type="text" maxlength="80">
+              </label>
+              <label class="field">
+                <span>Post ID</span>
+                <input id="post-id" type="text" maxlength="80">
+              </label>
+              <label class="field field-wide">
+                <span>Optional description</span>
+                <textarea id="post-description" rows="3" placeholder="Internal note, campaign name, CTA, etc."></textarea>
+              </label>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="panel-kicker">Clips</p>
+                <h2>Upload or paste URLs</h2>
+              </div>
+              <div class="panel-actions">
+                <span id="clip-count" class="badge">0 / 10 clips</span>
+              </div>
+            </div>
+
+            <div class="upload-grid">
+              <label class="upload-card" for="file-input">
+                <input id="file-input" type="file" accept="video/*" multiple hidden>
+                <strong>Upload to Cloudinary</strong>
+                <span>Choose video files and Postal will upload them with your unsigned preset.</span>
+              </label>
+
+              <div class="upload-card upload-card-secondary">
+                <strong>Add existing Cloudinary URL</strong>
+                <span>Paste a public video URL if the asset is already in Cloudinary.</span>
+                <div class="url-row">
+                  <input id="manual-url" type="url" placeholder="https://res.cloudinary.com/.../video/upload/...mp4">
+                  <button id="add-url-btn" class="button" type="button">Add URL</button>
+                </div>
+              </div>
+            </div>
+
+            <div id="upload-status" class="status hidden"></div>
+            <div id="clip-list" class="clip-list"></div>
+          </section>
+
+          <section class="editor-grid">
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Viewer preview</p>
+                  <h2>Current clip</h2>
+                </div>
+                <span id="preview-index" class="badge muted">0 / 0</span>
+              </div>
+              <div class="phone-frame">
+                <video id="preview-video" playsinline muted loop preload="metadata"></video>
+                <div id="preview-placeholder" class="preview-placeholder">
+                  Add clips to preview the active slide.
+                </div>
+              </div>
+              <div class="preview-controls">
+                <button id="preview-prev-btn" class="button" type="button">Previous</button>
+                <button id="preview-next-btn" class="button" type="button">Next</button>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Publish</p>
+                  <h2>Static JSON output</h2>
+                </div>
+              </div>
+              <div class="publish-card">
+                <div class="publish-meta">
+                  <span>Filename</span>
+                  <strong id="publish-filename">posts/post.json</strong>
+                </div>
+                <div class="publish-meta">
+                  <span>Viewer URL</span>
+                  <strong id="viewer-link-text">Set GitHub Pages base URL to generate</strong>
+                </div>
+                <div class="publish-actions">
+                  <button id="download-json-btn" class="button button-primary" type="button">Download JSON</button>
+                  <button id="copy-json-btn" class="button" type="button">Copy JSON</button>
+                  <button id="copy-link-btn" class="button" type="button">Copy viewer link</button>
+                </div>
+                <ol class="publish-steps">
+                  <li>Download the generated JSON.</li>
+                  <li>Place it in <code>posts/&lt;post-id&gt;.json</code> in your GitHub Pages repo.</li>
+                  <li>Commit and push. The viewer URL becomes live as soon as GitHub Pages republishes.</li>
+                </ol>
+              </div>
+              <pre id="json-output" class="json-output"></pre>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="./scripts/shared.js"></script>
+  <script src="./scripts/admin.js"></script>
+</body>
+</html>
